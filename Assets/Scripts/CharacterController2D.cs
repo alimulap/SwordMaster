@@ -41,6 +41,7 @@ public class CharacterController2D : MonoBehaviour
         if (this.velocity.y != 0)
         {
             int dir = this.velocity.y > 0 ? 1 : -1;
+            bool rayHit = false;
             for (uint i = 0; i < this.castCount; i++)
             {
                 Vector2 rayOrigin =
@@ -61,21 +62,18 @@ public class CharacterController2D : MonoBehaviour
                     Mathf.Abs(this.velocity.y),
                     this.collisionMask
                 );
-                Debug.DrawRay(rayOrigin, Vector3.up * this.velocity.y, Color.red, 1f);
+                Debug.DrawRay(rayOrigin, Vector3.up * this.velocity.y, Color.red);
 
                 if (hit)
                 {
                     this.velocity.y = hit.distance * dir;
-                    if (dir == -1)
-                    {
-                        this.isOnGround = true;
-                    }
-                }
-                else
-                {
-                    this.isOnGround = false;
+                    rayHit = true;
                 }
             }
+            if (rayHit && dir == -1)
+                this.isOnGround = true;
+            else
+                this.isOnGround = false;
         }
     }
 
