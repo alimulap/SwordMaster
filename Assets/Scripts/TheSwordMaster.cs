@@ -5,6 +5,7 @@ using UnityEngine;
 public class TheSwordMaster : CharacterController2D
 {
     SpriteRenderer sprite;
+    Animator animator;
 
     bool shouldJump = false;
     bool isJumping = false;
@@ -17,6 +18,8 @@ public class TheSwordMaster : CharacterController2D
     public override void Start()
     {
         this.sprite = GetComponent<SpriteRenderer>();
+        // this.sprite.transform.localScale = new(-1, 1, 1);
+        this.animator = GetComponent<Animator>();
         base.Start();
     }
 
@@ -48,10 +51,10 @@ public class TheSwordMaster : CharacterController2D
         switch (this.facing)
         {
             case FaceDir.Right:
-                this.sprite.flipX = false;
+                // this.sprite.flipX = false;
                 break;
             case FaceDir.Left:
-                this.sprite.flipX = true;
+                // this.sprite.flipX = true;
                 break;
         }
     }
@@ -62,6 +65,8 @@ public class TheSwordMaster : CharacterController2D
         this.JumpHandler();
         this.Accelerate();
         this.Move();
+        this.AnimatorController();
+        Debug.Log("IsOnGround: " + this.isOnGround);
     }
 
     void JumpHandler()
@@ -91,6 +96,14 @@ public class TheSwordMaster : CharacterController2D
                 this.velocity.x = 0;
                 break;
         }
+    }
+
+    void AnimatorController()
+    {
+        this.animator.SetFloat("x_velocity", this.velocity.x);
+        this.animator.SetFloat("y_velocity", this.velocity.y);
+        this.animator.SetFloat("x_abs_velocity", Mathf.Abs(this.velocity.x));
+        this.animator.SetBool("is_on_ground", this.isOnGround);
     }
 
     void Gravitate()
