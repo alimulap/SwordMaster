@@ -9,10 +9,14 @@ public class TheSwordMaster : Entity
     public float jumpForce = 30;
     public float dashSpeed = 0.050f;
     public float rollSpeed = 0.035f;
+    public float dashCooldown = 0.5f;
+    public float rollCooldown = 0.3f;
 
     Animator animator;
 
     Vector2 gravity;
+    float lashDashTime = -Mathf.Infinity;
+    float lastRollTime = -Mathf.Infinity;
 
     bool shouldJump = false;
 
@@ -60,7 +64,12 @@ public class TheSwordMaster : Entity
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.K) && this.currAtt.Equals(Attack.None) && !this.isRolling)
+        if (
+            Input.GetKeyDown(KeyCode.K)
+            && this.currAtt.Equals(Attack.None)
+            && !this.isRolling
+            && Time.time >= this.lashDashTime + this.dashCooldown + 0.1f
+        )
         {
             this.shouldDash = true;
         }
@@ -70,6 +79,7 @@ public class TheSwordMaster : Entity
             && this.currAtt.Equals(Attack.None)
             && !this.isDashing
             && this.isOnGround
+            && Time.time >= this.lastRollTime + this.rollCooldown + 0.1f
         )
         {
             this.shouldRoll = true;
@@ -84,32 +94,42 @@ public class TheSwordMaster : Entity
             this.shouldJump = true;
         }
 
-        bool rightDown = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
-        bool leftDown = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
-
-        switch (rightDown, leftDown, this.currAtt == Attack.None)
+        if (!this.isDashing && !this.isRolling)
         {
-            case (true, false, true):
-                this.moveDir = MoveDir.Right;
-                this.facing = FaceDir.Right;
-                break;
-            case (false, true, true):
-                this.moveDir = MoveDir.Left;
-                this.facing = FaceDir.Left;
-                break;
-            default:
-                this.moveDir = MoveDir.None;
-                break;
-        }
+            bool rightDown = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+            bool leftDown = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
+            bool isAttacking = this.currAtt == Attack.None;
 
-        switch (this.facing)
-        {
-            case FaceDir.Right:
-                this.transform.localScale = new(1, 1, 1);
-                break;
-            case FaceDir.Left:
-                this.transform.localScale = new(-1, 1, 1);
-                break;
+            switch (rightDown, leftDown)
+            {
+                case (true, false):
+                    this.facing = FaceDir.Right;
+                    if (isAttacking)
+                        this.moveDir = MoveDir.Right;
+                    else
+                        this.moveDir = MoveDir.None;
+                    break;
+                case (false, true):
+                    this.facing = FaceDir.Left;
+                    if (isAttacking)
+                        this.moveDir = MoveDir.Left;
+                    else
+                        this.moveDir = MoveDir.None;
+                    break;
+                default:
+                    this.moveDir = MoveDir.None;
+                    break;
+            }
+
+            switch (this.facing)
+            {
+                case FaceDir.Right:
+                    this.transform.localScale = new(1, 1, 1);
+                    break;
+                case FaceDir.Left:
+                    this.transform.localScale = new(-1, 1, 1);
+                    break;
+            }
         }
     }
 
@@ -249,6 +269,7 @@ public class TheSwordMaster : Entity
     {
         this.isDashing = false;
         this.velocity.x = 0;
+        this.lashDashTime = Time.time;
         this.animator.SetBool("is_dashing", false);
     }
 
@@ -263,6 +284,7 @@ public class TheSwordMaster : Entity
             this.isRolling = false;
             this.velocity.x = 0;
             this.currAtt = Attack.None;
+            this.lastRollTime = Time.time;
             this.animator.SetBool("is_rolling", false);
         }
     }
@@ -270,6 +292,12 @@ public class TheSwordMaster : Entity
     void StopHorizontalMove()
     {
         this.velocity.x = 0;
+    }
+
+    public override void Damage(float amount)
+    {
+        if (!this.isRolling)
+            this.Health -= amount;
     }
 }
 

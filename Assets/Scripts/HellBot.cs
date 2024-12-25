@@ -105,7 +105,7 @@ public class HellBot : Enemy
 
     public override void OnTargetEnterAttack(Collider2D col)
     {
-        col.GetComponent<Entity>().Damage(10);
+        col.GetComponent<Entity>().Damage(2);
     }
 
     void FinishAttacking()
