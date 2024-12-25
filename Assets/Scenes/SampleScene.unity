@@ -18674,9 +18674,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   gravityMultiplier: 0.025
-  moveAcceleration: 0.07
-  jumpForce: 3.5
-  dashSpeed: 0.1
+  moveSpeed: 0.02
+  jumpForce: 0.07
+  dashSpeed: 0.2
   rollSpeed: 0.035
 --- !u!1 &317236658
 GameObject:
@@ -18697,7 +18697,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &317236659
 Animator:
   serializedVersion: 5

@@ -5,7 +5,7 @@ using UnityEngine;
 public class TheSwordMaster : Entity
 {
     public float gravityMultiplier = 0.025f;
-    public float moveAcceleration = 10;
+    public float moveSpeed = 0.02f;
     public float jumpForce = 30;
     public float dashSpeed = 0.050f;
     public float rollSpeed = 0.035f;
@@ -129,7 +129,7 @@ public class TheSwordMaster : Entity
     {
         if (this.shouldJump)
         {
-            this.velocity += Vector2.up * this.jumpForce * Time.fixedDeltaTime;
+            this.velocity = Vector2.up * this.jumpForce;
             this.shouldJump = false;
         }
     }
@@ -143,12 +143,12 @@ public class TheSwordMaster : Entity
                 case MoveDir.Right:
                     if (this.velocity.x < 0)
                         this.velocity = new Vector2(0, this.velocity.y);
-                    this.velocity.x += this.moveAcceleration * Time.fixedDeltaTime;
+                    this.velocity.x = this.moveSpeed;
                     break;
                 case MoveDir.Left:
                     if (this.velocity.x > 0)
                         this.velocity = new Vector2(0, this.velocity.y);
-                    this.velocity.x -= this.moveAcceleration * Time.fixedDeltaTime;
+                    this.velocity.x = -this.moveSpeed;
                     break;
                 case MoveDir.None:
                     this.velocity.x = 0;
@@ -257,8 +257,8 @@ public class TheSwordMaster : Entity
     {
         bool attackFinished = attack.Equals(1);
         bool isRollAttacking = this.currAtt.Equals(Attack.RollAttack);
-        // if (!(isRollAttacking ^ attackFinished))
-        if ((isRollAttacking && attackFinished) || (!isRollAttacking && !attackFinished))
+        if (!(isRollAttacking ^ attackFinished))
+        // if ((isRollAttacking && attackFinished) || (!isRollAttacking && !attackFinished))
         {
             this.isRolling = false;
             this.velocity.x = 0;
