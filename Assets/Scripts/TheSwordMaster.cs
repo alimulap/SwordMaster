@@ -2,8 +2,12 @@
 // using System.Collections.Generic;
 using UnityEngine;
 
-public class TheSwordMaster : CharacterController2D
+public class TheSwordMaster : Entity
 {
+    public float moveAcceleration = 10;
+    public float jumpForce = 30;
+    public Vector2 gravity = new Vector2(0, -0.98f);
+
     SpriteRenderer sprite;
     Animator animator;
 
@@ -79,10 +83,10 @@ public class TheSwordMaster : CharacterController2D
         switch (this.facing)
         {
             case FaceDir.Right:
-                // this.sprite.flipX = false;
+                this.transform.localScale = new(1, 1, 1);
                 break;
             case FaceDir.Left:
-                // this.sprite.flipX = true;
+                this.transform.localScale = new(-1, 1, 1);
                 break;
         }
     }
@@ -98,10 +102,7 @@ public class TheSwordMaster : CharacterController2D
         // Debug.Log("Vel: " + this.velocity);
     }
 
-    void AttackHandler()
-    {
-        if (this.finishedAnAtt) { }
-    }
+    void AttackHandler() { }
 
     void JumpHandler()
     {
@@ -189,6 +190,15 @@ public class TheSwordMaster : CharacterController2D
             this.animator.SetTrigger("exit_combo");
         }
     }
+
+    public void OnEnemyEnterAttack(Enemy enemy)
+    {
+        enemy.Damage(10);
+    }
+
+    public override void Damage(float amount) { }
+
+    public override void Heal(float amount) { }
 
     void DashEnds()
     {

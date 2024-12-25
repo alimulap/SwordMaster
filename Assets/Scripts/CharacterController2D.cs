@@ -11,9 +11,6 @@ public class CharacterController2D : MonoBehaviour
     protected Vector2 velocity = new Vector2(0, 0);
     protected bool isOnGround = false;
 
-    public Vector2 gravity = new Vector2(0, -0.98f);
-    public float jumpForce = 30;
-    public float moveAcceleration = 10;
     public uint castCount = 3;
 
     public virtual void Start()
