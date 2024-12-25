@@ -10,7 +10,7 @@ public class SimpleHPBar : MonoBehaviour
 
     void Start()
     {
-        this.entity = GetComponentInParent<Entity>();
+        this.entity = GetComponentInParent<Transform>().GetComponentInParent<Entity>();
         this.entity.healthChanged.AddListener(UpdateRemaining);
         this.full = this.transform.Find("Full");
         this.remaining = this.transform.Find("Remaining");

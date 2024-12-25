@@ -10,6 +10,7 @@ public class TheSwordMaster : Entity
 
     SpriteRenderer sprite;
     Animator animator;
+    Transform hpbarAnchor;
 
     bool shouldJump = false;
 
@@ -31,6 +32,7 @@ public class TheSwordMaster : Entity
         this.sprite = GetComponent<SpriteRenderer>();
         // this.sprite.transform.localScale = new(-1, 1, 1);
         this.animator = GetComponent<Animator>();
+        this.hpbarAnchor = this.transform.Find("HPBarAnchor");
         base.Start();
     }
 
@@ -84,9 +86,13 @@ public class TheSwordMaster : Entity
         {
             case FaceDir.Right:
                 this.transform.localScale = new(1, 1, 1);
+                if (this.hpbarAnchor)
+                    this.hpbarAnchor.localScale = new(1, 1, 1);
                 break;
             case FaceDir.Left:
                 this.transform.localScale = new(-1, 1, 1);
+                if (this.hpbarAnchor)
+                    this.hpbarAnchor.localScale = new(-1, 1, 1);
                 break;
         }
     }
@@ -191,14 +197,15 @@ public class TheSwordMaster : Entity
         }
     }
 
+    public override void OnTargetEnterAttack(Collider2D col)
+    {
+        this.OnEnemyEnterAttack(col.GetComponent<Enemy>());
+    }
+
     public void OnEnemyEnterAttack(Enemy enemy)
     {
         enemy.Damage(10);
     }
-
-    public override void Damage(float amount) { }
-
-    public override void Heal(float amount) { }
 
     void DashEnds()
     {

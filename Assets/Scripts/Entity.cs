@@ -1,5 +1,6 @@
 // using System.Collections;
 // using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 
 public abstract class Entity : CharacterController2D
@@ -24,7 +25,15 @@ public abstract class Entity : CharacterController2D
         }
     }
 
-    public abstract void Damage(float amount);
+    public virtual void Damage(float amount)
+    {
+        this.Health -= amount;
+    }
 
-    public abstract void Heal(float amount);
+    public virtual void Heal(float amount)
+    {
+        this.health += amount;
+    }
+
+    public virtual void OnTargetEnterAttack(Collider2D col) { }
 }

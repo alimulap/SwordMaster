@@ -8,12 +8,16 @@ public class HellBot : Enemy
     public Vector2 gravity = new Vector2(0, -0.98f);
 
     TheSwordMaster player;
+    Animator animator;
     bool playerInRadarZone = false;
     bool playerInRangedZone = false;
     bool playerInMeleeZone = false;
+    bool isAttacking = false;
+    bool isShooting = false;
 
     public override void Start()
     {
+        this.animator = GetComponent<Animator>();
         base.Start();
     }
 
@@ -22,19 +26,27 @@ public class HellBot : Enemy
     public override void FixedUpdate()
     {
         this.velocity += this.gravity * Time.fixedDeltaTime;
-        if (this.playerInMeleeZone)
+        if (!this.isAttacking && !this.isShooting)
         {
-            this.velocity.x = 0;
+            if (this.playerInMeleeZone)
+            {
+                this.isAttacking = true;
+                this.velocity.x = 0;
+                this.animator.SetTrigger("attack");
+            }
+            else if (this.playerInRangedZone)
+            {
+                this.isShooting = true;
+                this.velocity.x = 0;
+                this.animator.SetTrigger("shot");
+            }
+            else if (this.playerInRadarZone)
+            {
+                float x_distance = this.player.transform.position.x - this.transform.position.x;
+                this.velocity.x = (x_distance > 0 ? this.speed : -this.speed);
+            }
         }
-        else if (this.playerInRangedZone)
-        {
-            this.velocity.x = 0;
-        }
-        else if (this.playerInRadarZone)
-        {
-            float x_distance = this.player.transform.position.x - this.transform.position.x;
-            this.velocity.x = (x_distance > 0 ? this.speed : -this.speed);
-        }
+        this.animator.SetFloat("x_abs_velocity", Mathf.Abs(this.velocity.x));
         this.Move();
     }
 
@@ -80,11 +92,24 @@ public class HellBot : Enemy
         }
     }
 
+    public override void OnTargetEnterAttack(Collider2D col)
+    {
+        col.GetComponent<Entity>().Damage(10);
+    }
+
     public override void Damage(float amount)
     {
         this.Health -= amount;
-        Debug.Log("HellBot health: " + this.Health);
+        // Debug.Log("HellBot health: " + this.Health);
     }
 
-    public override void Heal(float amount) { }
+    void FinishAttacking()
+    {
+        this.isAttacking = false;
+    }
+
+    void FinishShooting()
+    {
+        this.isShooting = false;
+    }
 }
