@@ -70,7 +70,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.5000001
+        time: 0.39
         value: 0
         inSlope: Infinity
         outSlope: Infinity
@@ -92,7 +92,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0.1
-        value: 0.050199
+        value: 0.15
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -113,7 +113,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0.1
-        value: 0.1355
+        value: -0.01
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -179,11 +179,11 @@ AnimationClip:
       value: {fileID: -1542460618414413073, guid: c993d34a8974cb54db17e6c863561e67, type: 3}
     - time: 0.19999981
       value: {fileID: -2995892572945832592, guid: c993d34a8974cb54db17e6c863561e67, type: 3}
-    - time: 0.3000002
+    - time: 0.27
       value: {fileID: 3945942311999457829, guid: c993d34a8974cb54db17e6c863561e67, type: 3}
-    - time: 0.4000001
+    - time: 0.33
       value: {fileID: 9210233732674603044, guid: c993d34a8974cb54db17e6c863561e67, type: 3}
-    - time: 0.49000013
+    - time: 0.38
       value: {fileID: 9210233732674603044, guid: c993d34a8974cb54db17e6c863561e67, type: 3}
     attribute: m_Sprite
     path: 
@@ -272,7 +272,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.5000001
+    m_StopTime: 0.39
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -341,7 +341,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.5000001
+        time: 0.39
         value: 0
         inSlope: Infinity
         outSlope: Infinity
@@ -363,7 +363,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0.1
-        value: 0.050199
+        value: 0.15
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -384,7 +384,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0.1
-        value: 0.1355
+        value: -0.01
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -452,7 +452,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.44
+  - time: 0.34
     functionName: AttackFinished
     data: 
     objectReferenceParameter: {fileID: 0}
