@@ -30,8 +30,10 @@ public class HellBot : Enemy
     public override void FixedUpdate()
     {
         this.velocity += this.gravity * this.gravityMultiplier * Time.fixedDeltaTime;
-        if (!this.isAttacking && !this.isShooting)
+
+        if (this.player != null && !this.isAttacking && !this.isShooting)
         {
+            float x_distance = this.player.transform.position.x - this.transform.position.x;
             if (this.playerInMeleeZone)
             {
                 this.isAttacking = true;
@@ -46,10 +48,15 @@ public class HellBot : Enemy
             }
             else if (this.playerInRadarZone)
             {
-                float x_distance = this.player.transform.position.x - this.transform.position.x;
                 this.velocity.x = (x_distance > 0 ? this.speed : -this.speed);
             }
+
+            if (x_distance > 0)
+                this.transform.localScale = new(1, 1, 1);
+            else
+                this.transform.localScale = new(-1, 1, 1);
         }
+
         this.animator.SetFloat("x_abs_velocity", Mathf.Abs(this.velocity.x));
         this.Move();
     }
@@ -99,12 +106,6 @@ public class HellBot : Enemy
     public override void OnTargetEnterAttack(Collider2D col)
     {
         col.GetComponent<Entity>().Damage(10);
-    }
-
-    public override void Damage(float amount)
-    {
-        this.Health -= amount;
-        // Debug.Log("HellBot health: " + this.Health);
     }
 
     void FinishAttacking()

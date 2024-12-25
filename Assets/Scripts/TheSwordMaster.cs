@@ -14,9 +14,7 @@ public class TheSwordMaster : Entity
 
     bool shouldJump = false;
 
-    bool isAttacking = false;
     bool readyNextAtt = true;
-    bool finishedAnAtt = true;
     bool comboTriggered = false;
     bool isDashing = false;
     bool isRolling = false;

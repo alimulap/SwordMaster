@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class CollisionInfo
-{
-    bool isOnGround = false;
-}
-
+// public class CollisionInfo
+// {
+//     bool isOnGround = false;
+// }
+//
 public class RayCastOrigins
 {
     public Vector2 topRight = new Vector2(0, 0);
