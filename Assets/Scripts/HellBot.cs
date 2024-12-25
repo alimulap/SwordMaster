@@ -5,10 +5,13 @@ using UnityEngine;
 public class HellBot : Enemy
 {
     public float speed = .2f;
-    public Vector2 gravity = new Vector2(0, -0.98f);
+    public float gravityMultiplier = 0.025f;
 
     TheSwordMaster player;
     Animator animator;
+
+    Vector2 gravity;
+
     bool playerInRadarZone = false;
     bool playerInRangedZone = false;
     bool playerInMeleeZone = false;
@@ -18,6 +21,7 @@ public class HellBot : Enemy
     public override void Start()
     {
         this.animator = GetComponent<Animator>();
+        this.gravity = Physics2D.gravity;
         base.Start();
     }
 
@@ -25,7 +29,7 @@ public class HellBot : Enemy
 
     public override void FixedUpdate()
     {
-        this.velocity += this.gravity * Time.fixedDeltaTime;
+        this.velocity += this.gravity * this.gravityMultiplier * Time.fixedDeltaTime;
         if (!this.isAttacking && !this.isShooting)
         {
             if (this.playerInMeleeZone)

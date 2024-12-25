@@ -6,15 +6,14 @@ public class TheSwordMaster : Entity
 {
     public float moveAcceleration = 10;
     public float jumpForce = 30;
-    public Vector2 gravity = new Vector2(0, -0.98f);
+    public float gravityMultiplier = 0.025f;
 
-    SpriteRenderer sprite;
     Animator animator;
-    Transform hpbarAnchor;
+
+    Vector2 gravity;
 
     bool shouldJump = false;
 
-    // bool isJumping = false;
     bool isAttacking = false;
     bool readyNextAtt = true;
     bool finishedAnAtt = true;
@@ -29,10 +28,8 @@ public class TheSwordMaster : Entity
 
     public override void Start()
     {
-        this.sprite = GetComponent<SpriteRenderer>();
-        // this.sprite.transform.localScale = new(-1, 1, 1);
         this.animator = GetComponent<Animator>();
-        this.hpbarAnchor = this.transform.Find("HPBarAnchor");
+        this.gravity = Physics2D.gravity;
         base.Start();
     }
 
@@ -86,13 +83,9 @@ public class TheSwordMaster : Entity
         {
             case FaceDir.Right:
                 this.transform.localScale = new(1, 1, 1);
-                if (this.hpbarAnchor)
-                    this.hpbarAnchor.localScale = new(1, 1, 1);
                 break;
             case FaceDir.Left:
                 this.transform.localScale = new(-1, 1, 1);
-                if (this.hpbarAnchor)
-                    this.hpbarAnchor.localScale = new(-1, 1, 1);
                 break;
         }
     }
@@ -105,7 +98,6 @@ public class TheSwordMaster : Entity
         this.Accelerate();
         this.Move();
         this.AnimatorController();
-        // Debug.Log("Vel: " + this.velocity);
     }
 
     void AttackHandler() { }
@@ -149,7 +141,7 @@ public class TheSwordMaster : Entity
 
     void Gravitate()
     {
-        this.velocity += this.gravity * Time.fixedDeltaTime;
+        this.velocity += this.gravity * this.gravityMultiplier * Time.fixedDeltaTime;
     }
 
     void ReadyNextAttack()

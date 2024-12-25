@@ -21,7 +21,7 @@ public class SimpleHPBar : MonoBehaviour
 
     void UpdateRemaining()
     {
-        float fraction = this.entity.Health / this.entity.MaxHealth;
+        float fraction = this.entity.Health <= 0 ? 0 : (this.entity.Health / this.entity.MaxHealth);
         var remainingScale = this.remaining.transform.localScale;
         this.remaining.transform.localScale = new(
             this.full.transform.localScale.x * fraction,
