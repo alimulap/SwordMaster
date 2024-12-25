@@ -18673,9 +18673,11 @@ MonoBehaviour:
   healthChanged:
     m_PersistentCalls:
       m_Calls: []
+  gravityMultiplier: 0.025
   moveAcceleration: 0.07
   jumpForce: 3.5
-  gravity: {x: 0, y: -0.25}
+  dashSpeed: 0.1
+  rollSpeed: 0.035
 --- !u!1 &317236658
 GameObject:
   m_ObjectHideFlags: 0
@@ -18695,7 +18697,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &317236659
 Animator:
   serializedVersion: 5
@@ -18806,7 +18808,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   speed: 0.02
-  gravity: {x: 0, y: -0.98}
+  gravityMultiplier: 0.025
 --- !u!61 &317236663
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19232,7 +19234,7 @@ Transform:
   m_GameObject: {fileID: 1158647559}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.34850258, y: 0.1249034, z: 0.0052958867}
+  m_LocalPosition: {x: 0.368, y: 0.135, z: 0.0052958867}
   m_LocalScale: {x: 0.1, y: 0.03544695, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19787,6 +19789,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1562696701}
+  - component: {fileID: 1562696702}
   m_Layer: 0
   m_Name: HPBarAnchor
   m_TagString: Untagged
@@ -19810,6 +19813,18 @@ Transform:
   - {fileID: 1363236967}
   m_Father: {fileID: 303723190}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1562696702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562696700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 787c2eb579363d24ea2e131516e7b2c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1693063121
 GameObject:
   m_ObjectHideFlags: 0

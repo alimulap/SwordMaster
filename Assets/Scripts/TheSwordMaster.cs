@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class TheSwordMaster : Entity
 {
+    public float gravityMultiplier = 0.025f;
     public float moveAcceleration = 10;
     public float jumpForce = 30;
-    public float gravityMultiplier = 0.025f;
+    public float dashSpeed = 0.050f;
+    public float rollSpeed = 0.035f;
 
     Animator animator;
 
@@ -16,7 +18,9 @@ public class TheSwordMaster : Entity
 
     bool readyNextAtt = true;
     bool comboTriggered = false;
+    bool shouldDash = false;
     bool isDashing = false;
+    bool shouldRoll = false;
     bool isRolling = false;
 
     MoveDir moveDir = MoveDir.None;
@@ -35,7 +39,13 @@ public class TheSwordMaster : Entity
     {
         if (Input.GetKeyDown(KeyCode.J))
         {
-            if (this.currAtt.Equals(Attack.None))
+            if (this.isDashing) { }
+            else if (this.isRolling)
+            {
+                this.currAtt = Attack.RollAttack;
+                this.animator.SetTrigger("roll_attack");
+            }
+            else if (this.currAtt.Equals(Attack.None))
             {
                 this.currAtt = Attack.Slash1;
                 this.nextAtt = Attack.Slash1;
@@ -48,6 +58,21 @@ public class TheSwordMaster : Entity
                 this.readyNextAtt = false;
                 this.animator.SetTrigger("combo");
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.K) && this.currAtt.Equals(Attack.None) && !this.isRolling)
+        {
+            this.shouldDash = true;
+        }
+
+        if (
+            Input.GetKeyDown(KeyCode.N)
+            && this.currAtt.Equals(Attack.None)
+            && !this.isDashing
+            && this.isOnGround
+        )
+        {
+            this.shouldRoll = true;
         }
 
         if (
@@ -93,7 +118,7 @@ public class TheSwordMaster : Entity
         this.Gravitate();
         this.AttackHandler();
         this.JumpHandler();
-        this.Accelerate();
+        this.MovementHandler();
         this.Move();
         this.AnimatorController();
     }
@@ -109,23 +134,46 @@ public class TheSwordMaster : Entity
         }
     }
 
-    void Accelerate()
+    void MovementHandler()
     {
-        switch (this.moveDir)
+        if (!this.isDashing && !this.isRolling)
         {
-            case MoveDir.Right:
-                if (this.velocity.x < 0)
-                    this.velocity = new Vector2(0, this.velocity.y);
-                this.velocity.x += this.moveAcceleration * Time.fixedDeltaTime;
-                break;
-            case MoveDir.Left:
-                if (this.velocity.x > 0)
-                    this.velocity = new Vector2(0, this.velocity.y);
-                this.velocity.x -= this.moveAcceleration * Time.fixedDeltaTime;
-                break;
-            case MoveDir.None:
-                this.velocity.x = 0;
-                break;
+            switch (this.moveDir)
+            {
+                case MoveDir.Right:
+                    if (this.velocity.x < 0)
+                        this.velocity = new Vector2(0, this.velocity.y);
+                    this.velocity.x += this.moveAcceleration * Time.fixedDeltaTime;
+                    break;
+                case MoveDir.Left:
+                    if (this.velocity.x > 0)
+                        this.velocity = new Vector2(0, this.velocity.y);
+                    this.velocity.x -= this.moveAcceleration * Time.fixedDeltaTime;
+                    break;
+                case MoveDir.None:
+                    this.velocity.x = 0;
+                    break;
+            }
+        }
+
+        if (this.shouldDash)
+        {
+            int dir = this.facing.Equals(FaceDir.Right) ? 1 : -1;
+            this.velocity.x = this.dashSpeed * dir;
+            this.isDashing = true;
+            this.shouldDash = false;
+            this.animator.SetBool("is_dashing", true);
+            this.animator.SetTrigger("dash");
+        }
+
+        if (this.shouldRoll)
+        {
+            int dir = this.facing.Equals(FaceDir.Right) ? 1 : -1;
+            this.velocity.x = this.rollSpeed * dir;
+            this.isRolling = true;
+            this.shouldRoll = false;
+            this.animator.SetBool("is_rolling", true);
+            this.animator.SetTrigger("roll");
         }
     }
 
@@ -200,11 +248,28 @@ public class TheSwordMaster : Entity
     void DashEnds()
     {
         this.isDashing = false;
+        this.velocity.x = 0;
+        this.animator.SetBool("is_dashing", false);
     }
 
-    void RollEnds()
+    // 1 for attack, 0 for not attack
+    void RollEnds(int attack)
     {
-        this.isRolling = false;
+        bool attackFinished = attack.Equals(1);
+        bool isRollAttacking = this.currAtt.Equals(Attack.RollAttack);
+        // if (!(isRollAttacking ^ attackFinished))
+        if ((isRollAttacking && attackFinished) || (!isRollAttacking && !attackFinished))
+        {
+            this.isRolling = false;
+            this.velocity.x = 0;
+            this.currAtt = Attack.None;
+            this.animator.SetBool("is_rolling", false);
+        }
+    }
+
+    void StopHorizontalMove()
+    {
+        this.velocity.x = 0;
     }
 }
 
