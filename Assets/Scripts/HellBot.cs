@@ -129,13 +129,19 @@ public class HellBot : Enemy
     public override void Apply(Effect effect)
     {
         effect.startTime = Time.time;
-        this.effects.Add(effect);
+
         switch (effect.Type)
         {
             case EffectType.Hit:
                 this.animator.SetTrigger("hit");
                 break;
+            case EffectType.KnockUp:
+                this.velocity.y = (effect as KnockUp).force;
+                this.animator.SetTrigger("hit");
+                break;
         }
+
+        this.effects.Add(effect);
     }
 
     void FinishAttacking()

@@ -49,6 +49,7 @@ public abstract class Entity : CharacterController2D
                 {
                     case EffectType.Hit:
                     case EffectType.Knockback:
+                    case EffectType.KnockUp:
                         return true;
                 }
             }

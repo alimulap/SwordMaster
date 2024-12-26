@@ -27,7 +27,7 @@ public class UIHPBar : MonoBehaviour
     void UpdateRemaining()
     {
         float fraction = this.entity.Health <= 0 ? 0 : (this.entity.Health / this.entity.MaxHealth);
-        uint remainingBar = (uint)((float)this.barCount * fraction);
+        int remainingBar = Mathf.CeilToInt((float)this.barCount * fraction);
 
         var remainingSize = this.remaining.sizeDelta;
         remainingSize.x = this.barWidth * remainingBar;

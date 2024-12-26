@@ -289,7 +289,10 @@ public class TheSwordMaster : Entity
 
     public void OnEnemyEnterAttack(Enemy enemy)
     {
-        enemy.Apply(new KnockbackEffect());
+        if (this.nextAtt.Equals(Attack.Slam))
+            enemy.Apply(new KnockUp());
+        else
+            enemy.Apply(new Hit());
         enemy.Damage(10);
     }
 

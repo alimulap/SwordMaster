@@ -14,21 +14,31 @@ public abstract class Effect
         this.duration = duration;
     }
 
-    public EffectType Type;
+    public virtual EffectType Type { get; }
+}
+
+public class Hit : Effect
+{
+    new float duration = 0.3f;
+    public override EffectType Type => EffectType.Hit;
 }
 
 public class KnockbackEffect : Effect
 {
-    public KnockbackEffect()
-    {
-        this.duration = 0.2f;
-    }
+    new float duration = 0.3f;
+    public override EffectType Type => EffectType.Knockback;
+}
 
-    public new EffectType Type => EffectType.Knockback;
+public class KnockUp : Effect
+{
+    public float force = 0.03f;
+    new float duration = 0.5f;
+    public override EffectType Type => EffectType.KnockUp;
 }
 
 public enum EffectType
 {
     Hit,
     Knockback,
+    KnockUp,
 }
