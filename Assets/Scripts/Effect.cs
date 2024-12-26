@@ -4,14 +4,14 @@
 
 public abstract class Effect
 {
-    public float duration;
-    public float startTime;
+    public virtual float Duration { get; }
+    public virtual float StartTime { get; set; }
 
     public Effect() { }
 
     public Effect(float duration)
     {
-        this.duration = duration;
+        this.Duration = duration;
     }
 
     public virtual EffectType Type { get; }
@@ -19,20 +19,29 @@ public abstract class Effect
 
 public class Hit : Effect
 {
-    new float duration = 0.3f;
+    public override float Duration
+    {
+        get { return 0.3f; }
+    }
     public override EffectType Type => EffectType.Hit;
 }
 
 public class KnockbackEffect : Effect
 {
-    new float duration = 0.3f;
+    public override float Duration
+    {
+        get { return 0.3f; }
+    }
     public override EffectType Type => EffectType.Knockback;
 }
 
 public class KnockUp : Effect
 {
     public float force = 0.03f;
-    new float duration = 0.5f;
+    public override float Duration
+    {
+        get { return 0.5f; }
+    }
     public override EffectType Type => EffectType.KnockUp;
 }
 

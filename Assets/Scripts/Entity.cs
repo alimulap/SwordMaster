@@ -59,7 +59,7 @@ public abstract class Entity : CharacterController2D
 
     protected virtual void UpdateEffect()
     {
-        this.effects.RemoveWhere((effect) => Time.time >= effect.startTime + effect.duration);
+        this.effects.RemoveWhere((effect) => Time.time >= effect.StartTime + effect.Duration);
     }
 
     public virtual void OnTargetEnterAttack(Collider2D col) { }

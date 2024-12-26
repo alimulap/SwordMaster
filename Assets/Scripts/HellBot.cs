@@ -39,6 +39,7 @@ public class HellBot : Enemy
             this.animator.SetTrigger("hpzero_trigger");
         }
         this.UpdateEffect();
+        Debug.Log(this.effects.Count);
     }
 
     public override void FixedUpdate()
@@ -128,20 +129,23 @@ public class HellBot : Enemy
 
     public override void Apply(Effect effect)
     {
-        effect.startTime = Time.time;
+        effect.StartTime = Time.time;
+        this.effects.Add(effect);
 
         switch (effect.Type)
         {
             case EffectType.Hit:
+                this.isAttacking = false;
+                this.isShooting = false;
                 this.animator.SetTrigger("hit");
                 break;
             case EffectType.KnockUp:
+                this.isAttacking = false;
+                this.isShooting = false;
                 this.velocity.y = (effect as KnockUp).force;
                 this.animator.SetTrigger("hit");
                 break;
         }
-
-        this.effects.Add(effect);
     }
 
     void FinishAttacking()
