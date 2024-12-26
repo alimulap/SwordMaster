@@ -11,7 +11,7 @@ public class SimpleHPBar : MonoBehaviour
     void Start()
     {
         this.entity = GetComponentInParent<Transform>().GetComponentInParent<Entity>();
-        this.entity.healthChanged.AddListener(UpdateRemaining);
+        this.entity.healthChanged.AddListener(this.UpdateRemaining);
         this.full = this.transform.Find("Full");
         this.remaining = this.transform.Find("Remaining");
         this.UpdateRemaining();
@@ -28,5 +28,7 @@ public class SimpleHPBar : MonoBehaviour
             remainingScale.y,
             remainingScale.z
         );
+        if (this.entity.Health <= 0)
+            this.gameObject.SetActive(false);
     }
 }

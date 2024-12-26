@@ -21,6 +21,7 @@ public class HellBot : Enemy
     bool playerInMeleeZone = false;
     bool isAttacking = false;
     bool isShooting = false;
+    bool hpzero = false;
 
     public override void Start()
     {
@@ -29,7 +30,14 @@ public class HellBot : Enemy
         base.Start();
     }
 
-    public override void Update() { }
+    public override void Update()
+    {
+        if (this.Health <= 0 && !this.hpzero)
+        {
+            this.hpzero = true;
+            this.animator.SetTrigger("hpzero");
+        }
+    }
 
     public override void FixedUpdate()
     {
@@ -125,5 +133,10 @@ public class HellBot : Enemy
     {
         this.isShooting = false;
         this.lastRangedTime = Time.time;
+    }
+
+    void Destroy()
+    {
+        Destroy(this.gameObject);
     }
 }

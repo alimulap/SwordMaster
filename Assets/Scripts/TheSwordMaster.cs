@@ -1,6 +1,7 @@
 // using System.Collections;
 // using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TheSwordMaster : Entity
 {
@@ -26,6 +27,7 @@ public class TheSwordMaster : Entity
     bool isDashing = false;
     bool shouldRoll = false;
     bool isRolling = false;
+    bool hpzero = false;
 
     MoveDir moveDir = MoveDir.None;
     FaceDir facing = FaceDir.Right;
@@ -119,6 +121,12 @@ public class TheSwordMaster : Entity
         else
         {
             this.moveDir = MoveDir.None;
+        }
+
+        if (this.Health <= 0 && !this.hpzero)
+        {
+            this.hpzero = true;
+            this.animator.SetTrigger("hpzero");
         }
     }
 
@@ -317,6 +325,12 @@ public class TheSwordMaster : Entity
     {
         if (!this.isRolling)
             this.Health -= amount;
+    }
+
+    void Destroy()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 }
 
