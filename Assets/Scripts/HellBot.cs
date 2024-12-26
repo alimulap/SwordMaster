@@ -35,8 +35,10 @@ public class HellBot : Enemy
         if (this.Health <= 0 && !this.hpzero)
         {
             this.hpzero = true;
-            this.animator.SetTrigger("hpzero");
+            this.animator.SetBool("hpzero", true);
+            this.animator.SetTrigger("hpzero_trigger");
         }
+        this.UpdateEffect();
     }
 
     public override void FixedUpdate()
@@ -63,7 +65,8 @@ public class HellBot : Enemy
             }
             else if (this.playerInRadarZone)
             {
-                this.velocity.x = (x_distance > 0 ? this.speed : -this.speed);
+                if (!this.Immobilized)
+                    this.velocity.x = (x_distance > 0 ? this.speed : -this.speed);
             }
 
             if (x_distance > 0)
@@ -121,6 +124,18 @@ public class HellBot : Enemy
     public override void OnTargetEnterAttack(Collider2D col)
     {
         col.GetComponent<Entity>().Damage(2);
+    }
+
+    public override void Apply(Effect effect)
+    {
+        effect.startTime = Time.time;
+        this.effects.Add(effect);
+        switch (effect.Type)
+        {
+            case EffectType.Hit:
+                this.animator.SetTrigger("hit");
+                break;
+        }
     }
 
     void FinishAttacking()

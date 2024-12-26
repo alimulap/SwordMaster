@@ -289,6 +289,7 @@ public class TheSwordMaster : Entity
 
     public void OnEnemyEnterAttack(Enemy enemy)
     {
+        enemy.Apply(new KnockbackEffect());
         enemy.Damage(10);
     }
 
