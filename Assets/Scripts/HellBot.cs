@@ -6,11 +6,15 @@ public class HellBot : Enemy
 {
     public float speed = .2f;
     public float gravityMultiplier = 0.025f;
+    public float meleeCooldown = 1f;
+    public float rangedCooldown = 1f;
 
     TheSwordMaster player;
     Animator animator;
 
     Vector2 gravity;
+    float lastMeleeTime = -Mathf.Infinity;
+    float lastRangedTime = -Mathf.Infinity;
 
     bool playerInRadarZone = false;
     bool playerInRangedZone = false;
@@ -34,13 +38,16 @@ public class HellBot : Enemy
         if (this.player != null && !this.isAttacking && !this.isShooting)
         {
             float x_distance = this.player.transform.position.x - this.transform.position.x;
-            if (this.playerInMeleeZone)
+            if (this.playerInMeleeZone && Time.time >= this.lastMeleeTime + this.meleeCooldown)
             {
                 this.isAttacking = true;
                 this.velocity.x = 0;
                 this.animator.SetTrigger("attack");
             }
-            else if (this.playerInRangedZone)
+            else if (
+                this.playerInRangedZone
+                && Time.time >= this.lastRangedTime + this.rangedCooldown
+            )
             {
                 this.isShooting = true;
                 this.velocity.x = 0;
@@ -111,10 +118,12 @@ public class HellBot : Enemy
     void FinishAttacking()
     {
         this.isAttacking = false;
+        this.lastMeleeTime = Time.time;
     }
 
     void FinishShooting()
     {
         this.isShooting = false;
+        this.lastRangedTime = Time.time;
     }
 }
