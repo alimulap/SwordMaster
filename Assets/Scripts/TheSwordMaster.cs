@@ -94,42 +94,31 @@ public class TheSwordMaster : Entity
             this.shouldJump = true;
         }
 
-        if (!this.isDashing && !this.isRolling)
+        bool notDashingNorRolling = !this.isDashing && !this.isRolling;
+
+        if (this.currAtt.Equals(Attack.None))
         {
             bool rightDown = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
             bool leftDown = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
-            bool isAttacking = this.currAtt == Attack.None;
 
-            switch (rightDown, leftDown)
+            switch (rightDown, leftDown, notDashingNorRolling)
             {
-                case (true, false):
-                    this.facing = FaceDir.Right;
-                    if (isAttacking)
-                        this.moveDir = MoveDir.Right;
-                    else
-                        this.moveDir = MoveDir.None;
+                case (true, false, true):
+                    this.moveDir = MoveDir.Right;
                     break;
-                case (false, true):
-                    this.facing = FaceDir.Left;
-                    if (isAttacking)
-                        this.moveDir = MoveDir.Left;
-                    else
-                        this.moveDir = MoveDir.None;
+                case (false, true, true):
+                    this.moveDir = MoveDir.Left;
                     break;
                 default:
                     this.moveDir = MoveDir.None;
                     break;
             }
 
-            switch (this.facing)
-            {
-                case FaceDir.Right:
-                    this.transform.localScale = new(1, 1, 1);
-                    break;
-                case FaceDir.Left:
-                    this.transform.localScale = new(-1, 1, 1);
-                    break;
-            }
+            this.FacingHandler(rightDown, leftDown);
+        }
+        else
+        {
+            this.moveDir = MoveDir.None;
         }
     }
 
@@ -252,6 +241,36 @@ public class TheSwordMaster : Entity
             this.currAtt = Attack.None;
             this.nextAtt = Attack.None;
             this.animator.SetTrigger("exit_combo");
+        }
+
+        bool rightDown = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+        bool leftDown = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
+
+        this.FacingHandler(rightDown, leftDown);
+    }
+
+    void FacingHandler(bool rightDown, bool leftDown)
+    {
+        switch (rightDown, leftDown)
+        {
+            case (true, false):
+                this.facing = FaceDir.Right;
+                break;
+            case (false, true):
+                this.facing = FaceDir.Left;
+                break;
+            default:
+                break;
+        }
+
+        switch (this.facing)
+        {
+            case FaceDir.Right:
+                this.transform.localScale = new(1, 1, 1);
+                break;
+            case FaceDir.Left:
+                this.transform.localScale = new(-1, 1, 1);
+                break;
         }
     }
 
