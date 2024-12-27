@@ -22,7 +22,7 @@ public class Hit : Effect
     public Direction fromDirection;
     public override float Duration
     {
-        get { return 0.3f; }
+        get { return 1f; }
     }
     public override EffectType Type => EffectType.Hit;
 
@@ -38,7 +38,7 @@ public class KnockbackEffect : Effect
 {
     public override float Duration
     {
-        get { return 0.3f; }
+        get { return 1f; }
     }
     public override EffectType Type => EffectType.Knockback;
 }
@@ -48,7 +48,7 @@ public class KnockUp : Effect
     public float force = 0.03f;
     public override float Duration
     {
-        get { return 0.5f; }
+        get { return 1f; }
     }
     public override EffectType Type => EffectType.KnockUp;
 }

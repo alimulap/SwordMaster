@@ -57,6 +57,16 @@ public abstract class Entity : CharacterController2D
         }
     }
 
+    public virtual bool EffectExist(Effect effect)
+    {
+        foreach (var appliedEffect in this.effects)
+        {
+            if (appliedEffect.Type.Equals(effect))
+                return true;
+        }
+        return false;
+    }
+
     protected virtual void UpdateEffect()
     {
         this.effects.RemoveWhere((effect) => Time.time >= effect.StartTime + effect.Duration);

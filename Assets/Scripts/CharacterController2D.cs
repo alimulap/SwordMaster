@@ -11,6 +11,9 @@ public class CharacterController2D : MonoBehaviour
     protected Vector2 velocity = new Vector2(0, 0);
     protected bool isOnGround = false;
 
+    public Vector2 Velocity => this.velocity;
+    public bool IsOnGround => this.isOnGround;
+
     public uint castCount = 3;
 
     public virtual void Start()

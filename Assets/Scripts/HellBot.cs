@@ -154,6 +154,8 @@ public class HellBot : Enemy
 
     public override void Apply(Effect effect)
     {
+        if (this.EffectExist(effect))
+            return;
         effect.StartTime = Time.time;
         this.effects.Add(effect);
 
