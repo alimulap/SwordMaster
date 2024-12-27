@@ -19,11 +19,19 @@ public abstract class Effect
 
 public class Hit : Effect
 {
+    public Direction fromDirection;
     public override float Duration
     {
         get { return 0.3f; }
     }
     public override EffectType Type => EffectType.Hit;
+
+    public Hit() { }
+
+    public Hit(Direction dir)
+    {
+        this.fromDirection = dir;
+    }
 }
 
 public class KnockbackEffect : Effect

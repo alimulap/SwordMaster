@@ -30,7 +30,7 @@ public class TheSwordMaster : Entity
     bool hpzero = false;
 
     MoveDir moveDir = MoveDir.None;
-    FaceDir facing = FaceDir.Right;
+    Direction facing = Direction.Right;
     Attack currAtt = Attack.None;
     Attack nextAtt = Attack.None;
 
@@ -175,7 +175,7 @@ public class TheSwordMaster : Entity
 
         if (this.shouldDash)
         {
-            int dir = this.facing.Equals(FaceDir.Right) ? 1 : -1;
+            int dir = this.facing.Equals(Direction.Right) ? 1 : -1;
             this.velocity.x = this.dashSpeed * dir;
             this.isDashing = true;
             this.shouldDash = false;
@@ -185,7 +185,7 @@ public class TheSwordMaster : Entity
 
         if (this.shouldRoll)
         {
-            int dir = this.facing.Equals(FaceDir.Right) ? 1 : -1;
+            int dir = this.facing.Equals(Direction.Right) ? 1 : -1;
             this.velocity.x = this.rollSpeed * dir;
             this.isRolling = true;
             this.shouldRoll = false;
@@ -262,10 +262,10 @@ public class TheSwordMaster : Entity
         switch (rightDown, leftDown)
         {
             case (true, false):
-                this.facing = FaceDir.Right;
+                this.facing = Direction.Right;
                 break;
             case (false, true):
-                this.facing = FaceDir.Left;
+                this.facing = Direction.Left;
                 break;
             default:
                 break;
@@ -273,10 +273,10 @@ public class TheSwordMaster : Entity
 
         switch (this.facing)
         {
-            case FaceDir.Right:
+            case Direction.Right:
                 this.transform.localScale = new(1, 1, 1);
                 break;
-            case FaceDir.Left:
+            case Direction.Left:
                 this.transform.localScale = new(-1, 1, 1);
                 break;
         }
@@ -289,10 +289,16 @@ public class TheSwordMaster : Entity
 
     public void OnEnemyEnterAttack(Enemy enemy)
     {
+        Direction fromDirection =
+            this.transform.position.x - enemy.transform.position.x > 0
+                ? Direction.Right
+                : Direction.Left;
+
         if (this.nextAtt.Equals(Attack.Slam))
             enemy.Apply(new KnockUp());
         else
-            enemy.Apply(new Hit());
+            enemy.Apply(new Hit(fromDirection));
+
         enemy.Damage(10);
     }
 
@@ -343,12 +349,6 @@ enum MoveDir
     Right,
     Left,
     None,
-}
-
-enum FaceDir
-{
-    Right,
-    Left,
 }
 
 enum Attack

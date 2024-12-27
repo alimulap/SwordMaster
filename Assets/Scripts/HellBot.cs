@@ -11,6 +11,7 @@ public class HellBot : Enemy
 
     TheSwordMaster player;
     Animator animator;
+    FX fx;
 
     Vector2 gravity;
     float lastMeleeTime = -Mathf.Infinity;
@@ -27,6 +28,7 @@ public class HellBot : Enemy
     {
         this.animator = GetComponent<Animator>();
         this.gravity = Physics2D.gravity;
+        this.fx = this.transform.Find("Anchor/FX").GetComponent<FX>();
         base.Start();
     }
 
@@ -39,7 +41,7 @@ public class HellBot : Enemy
             this.animator.SetTrigger("hpzero_trigger");
         }
         this.UpdateEffect();
-        Debug.Log(this.effects.Count);
+        // Debug.Log(this.effects.Count);
     }
 
     public override void FixedUpdate()
@@ -49,7 +51,11 @@ public class HellBot : Enemy
         if (this.player != null && !this.isAttacking && !this.isShooting)
         {
             float x_distance = this.player.transform.position.x - this.transform.position.x;
-            if (this.playerInMeleeZone && Time.time >= this.lastMeleeTime + this.meleeCooldown)
+            if (
+                this.playerInMeleeZone
+                && Time.time >= this.lastMeleeTime + this.meleeCooldown
+                && this.CanAttack
+            )
             {
                 this.isAttacking = true;
                 this.velocity.x = 0;
@@ -58,6 +64,7 @@ public class HellBot : Enemy
             else if (
                 this.playerInRangedZone
                 && Time.time >= this.lastRangedTime + this.rangedCooldown
+                && this.CanAttack
             )
             {
                 this.isShooting = true;
@@ -127,6 +134,24 @@ public class HellBot : Enemy
         col.GetComponent<Entity>().Damage(2);
     }
 
+    bool CanAttack
+    {
+        get
+        {
+            foreach (var effect in this.effects)
+            {
+                switch (effect.Type)
+                {
+                    case EffectType.Hit:
+                    case EffectType.Knockback:
+                    case EffectType.KnockUp:
+                        return false;
+                }
+            }
+            return true;
+        }
+    }
+
     public override void Apply(Effect effect)
     {
         effect.StartTime = Time.time;
@@ -138,6 +163,7 @@ public class HellBot : Enemy
                 this.isAttacking = false;
                 this.isShooting = false;
                 this.animator.SetTrigger("hit");
+                this.fx.Trigger("hit3electric", (effect as Hit).fromDirection);
                 break;
             case EffectType.KnockUp:
                 this.isAttacking = false;

@@ -2,7 +2,7 @@
 // using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleHPBarAnchor : MonoBehaviour
+public class Anchor : MonoBehaviour
 {
     void Start() { }
 
