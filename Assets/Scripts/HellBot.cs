@@ -162,12 +162,14 @@ public class HellBot : Enemy
         switch (effect.Type)
         {
             case EffectType.Hit:
+                this.velocity.x = 0;
                 this.isAttacking = false;
                 this.isShooting = false;
                 this.animator.SetTrigger("hit");
                 this.fx.Trigger("hit3electric", (effect as Hit).fromDirection);
                 break;
             case EffectType.KnockUp:
+                this.velocity.x = 0;
                 this.isAttacking = false;
                 this.isShooting = false;
                 this.velocity.y = (effect as KnockUp).force;
